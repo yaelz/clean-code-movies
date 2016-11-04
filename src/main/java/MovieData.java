@@ -56,4 +56,48 @@ public class MovieData {
             return "OOPSI!";
         }
     }
+
+    public String rating(String movieTitle) {
+        HttpClient httpClient = HttpClients.custom().build();
+        RestClient restClient  = new RestClient(baseUrl, httpClient);
+        String jsonResponse = null;
+        try {
+            jsonResponse = restClient.executeGet("?t=" + movieTitle);
+        } catch (RestClientException e) {
+            e.printStackTrace();
+            return "OOPSI!";
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        try {
+            MovieInfo info = mapper.readValue(jsonResponse, MovieInfo.class);
+            return info.getImdbRating();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "OOPSI!";
+        }
+    }
+
+    public String posterUrl(String movieTitle) {
+        HttpClient httpClient = HttpClients.custom().build();
+        RestClient restClient  = new RestClient(baseUrl, httpClient);
+        String jsonResponse = null;
+        try {
+            jsonResponse = restClient.executeGet("?t=" + movieTitle);
+        } catch (RestClientException e) {
+            e.printStackTrace();
+            return "OOPSI!";
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        try {
+            MovieInfo info = mapper.readValue(jsonResponse, MovieInfo.class);
+            return info.getPosterUrl();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "OOPSI!";
+        }
+    }
 }
