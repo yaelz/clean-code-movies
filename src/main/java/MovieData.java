@@ -11,91 +11,73 @@ import java.io.IOException;
  * Created by Yael_Zaritsky on 03/11/2016.
  */
 public class MovieData {
-    private String baseUrl = "http://www.omdbapi.com/";
+    final String RETURN_ON_ERROR = "OOPSI!";
 
     public String howLongIsIt(String movieTitle) {
-        HttpClient httpClient = HttpClients.custom().build();
-        RestClient restClient  = new RestClient(baseUrl, httpClient);
-        String jsonResponse = null;
-        try {
-            jsonResponse = restClient.executeGet("?t=" + movieTitle);
-        } catch (RestClientException e) {
-            e.printStackTrace();
-            return "OOPSI!";
-        }
+        String jsonResponse = getMovieDataFromIMDB(movieTitle);
+        MovieInfo info = unmarhsal(jsonResponse);
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        try {
-            MovieInfo info = mapper.readValue(jsonResponse, MovieInfo.class);
+        if (info != null)
             return info.getRuntime();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "OOPSI!";
-        }
+        else
+            return RETURN_ON_ERROR;
     }
 
     public String plot(String movieTitle) {
-        HttpClient httpClient = HttpClients.custom().build();
-        RestClient restClient  = new RestClient(baseUrl, httpClient);
-        String jsonResponse = null;
-        try {
-            jsonResponse = restClient.executeGet("?t=" + movieTitle);
-        } catch (RestClientException e) {
-            e.printStackTrace();
-            return "OOPSI!";
-        }
+        String jsonResponse = getMovieDataFromIMDB(movieTitle);
+        MovieInfo info = unmarhsal(jsonResponse);
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        try {
-            MovieInfo info = mapper.readValue(jsonResponse, MovieInfo.class);
+        if (info != null)
             return info.getPlot();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "OOPSI!";
-        }
+        else
+            return RETURN_ON_ERROR;
     }
 
     public String rating(String movieTitle) {
-        HttpClient httpClient = HttpClients.custom().build();
-        RestClient restClient  = new RestClient(baseUrl, httpClient);
-        String jsonResponse = null;
-        try {
-            jsonResponse = restClient.executeGet("?t=" + movieTitle);
-        } catch (RestClientException e) {
-            e.printStackTrace();
-            return "OOPSI!";
-        }
+        String jsonResponse = getMovieDataFromIMDB(movieTitle);
+        MovieInfo info = unmarhsal(jsonResponse);
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        try {
-            MovieInfo info = mapper.readValue(jsonResponse, MovieInfo.class);
+        if (info != null) {
             return info.getImdbRating();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "OOPSI!";
+        }
+        else {
+            return RETURN_ON_ERROR;
         }
     }
 
     public String posterUrl(String movieTitle) {
-        HttpClient httpClient = HttpClients.custom().build();
-        RestClient restClient  = new RestClient(baseUrl, httpClient);
-        String jsonResponse = null;
-        try {
-            jsonResponse = restClient.executeGet("?t=" + movieTitle);
-        } catch (RestClientException e) {
-            e.printStackTrace();
-            return "OOPSI!";
-        }
+        String jsonResponse = getMovieDataFromIMDB(movieTitle);
+        MovieInfo info = unmarhsal(jsonResponse);
 
+        if (info != null)
+            return info.getPosterUrl();
+        else
+            return RETURN_ON_ERROR;
+    }
+
+    private MovieInfo unmarhsal(String jsonResponse) {
+        MovieInfo info;
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
-            MovieInfo info = mapper.readValue(jsonResponse, MovieInfo.class);
-            return info.getPosterUrl();
+            info = mapper.readValue(jsonResponse, MovieInfo.class);
+            return info;
         } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String getMovieDataFromIMDB(String movieTitle) {
+        String baseUrl = "http://www.omdbapi.com/";
+
+        String jsonResponse;
+        try {
+            HttpClient httpClient = HttpClients.custom().build();
+            RestClient restClient  = new RestClient(baseUrl, httpClient);
+            jsonResponse = restClient.executeGet("?t=" + movieTitle);
+            return jsonResponse;
+        } catch (RestClientException e) {
             e.printStackTrace();
             return "OOPSI!";
         }
