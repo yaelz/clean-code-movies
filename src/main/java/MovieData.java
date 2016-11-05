@@ -11,75 +11,50 @@ import java.io.IOException;
  * Created by Yael_Zaritsky on 03/11/2016.
  */
 public class MovieData {
-    final String RETURN_ON_ERROR = "OOPSI!";
 
-    public String howLongIsIt(String movieTitle) {
+    public String howLongIsIt(String movieTitle) throws RestClientException, IOException {
         String jsonResponse = getMovieDataFromIMDB(movieTitle);
-        MovieInfo info = unmarhsal(jsonResponse);
+        MovieInfo info = unMarhsall(jsonResponse);
 
-        if (info != null)
-            return info.getRuntime();
-        else
-            return RETURN_ON_ERROR;
+        return info.getRuntime();
     }
 
-    public String plot(String movieTitle) {
+    public String plot(String movieTitle) throws RestClientException, IOException {
         String jsonResponse = getMovieDataFromIMDB(movieTitle);
-        MovieInfo info = unmarhsal(jsonResponse);
+        MovieInfo info = unMarhsall(jsonResponse);
 
-        if (info != null)
-            return info.getPlot();
-        else
-            return RETURN_ON_ERROR;
+        return info.getPlot();
     }
 
-    public String rating(String movieTitle) {
+    public String rating(String movieTitle) throws RestClientException, IOException {
         String jsonResponse = getMovieDataFromIMDB(movieTitle);
-        MovieInfo info = unmarhsal(jsonResponse);
+        MovieInfo info = unMarhsall(jsonResponse);
 
-        if (info != null) {
-            return info.getImdbRating();
-        }
-        else {
-            return RETURN_ON_ERROR;
-        }
+        return info.getImdbRating();
     }
 
-    public String posterUrl(String movieTitle) {
+    public String posterUrl(String movieTitle) throws RestClientException, IOException {
         String jsonResponse = getMovieDataFromIMDB(movieTitle);
-        MovieInfo info = unmarhsal(jsonResponse);
+        MovieInfo info = unMarhsall(jsonResponse);
 
-        if (info != null)
-            return info.getPosterUrl();
-        else
-            return RETURN_ON_ERROR;
+        return info.getPosterUrl();
     }
 
-    private MovieInfo unmarhsal(String jsonResponse) {
+    private MovieInfo unMarhsall(String jsonResponse) throws IOException {
         MovieInfo info;
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        try {
-            info = mapper.readValue(jsonResponse, MovieInfo.class);
-            return info;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+        info = mapper.readValue(jsonResponse, MovieInfo.class);
+        return info;
     }
 
-    private String getMovieDataFromIMDB(String movieTitle) {
+    private String getMovieDataFromIMDB(String movieTitle) throws RestClientException {
         String baseUrl = "http://www.omdbapi.com/";
 
         String jsonResponse;
-        try {
-            HttpClient httpClient = HttpClients.custom().build();
-            RestClient restClient  = new RestClient(baseUrl, httpClient);
-            jsonResponse = restClient.executeGet("?t=" + movieTitle);
-            return jsonResponse;
-        } catch (RestClientException e) {
-            e.printStackTrace();
-            return "OOPSI!";
-        }
+        HttpClient httpClient = HttpClients.custom().build();
+        RestClient restClient  = new RestClient(baseUrl, httpClient);
+        jsonResponse = restClient.executeGet("?t=" + movieTitle);
+        return jsonResponse;
     }
 }
