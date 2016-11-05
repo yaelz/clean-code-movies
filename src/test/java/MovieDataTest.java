@@ -1,8 +1,6 @@
 import com.wixpress.ci.rest.client.RestClientException;
 import org.junit.Test;
-
 import java.io.IOException;
-
 import static org.junit.Assert.assertEquals;
 
 /**

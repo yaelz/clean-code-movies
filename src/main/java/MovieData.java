@@ -11,50 +11,33 @@ import java.io.IOException;
  * Created by Yael_Zaritsky on 03/11/2016.
  */
 public class MovieData {
+    private MovieDataFetcher movieDataFetcher;
+
+    public MovieData() {
+        movieDataFetcher = new MovieDataFetcher();
+    }
+
+    public MovieData(String baseUrl) {
+        movieDataFetcher = new MovieDataFetcher(baseUrl);
+    }
 
     public String howLongIsIt(String movieTitle) throws RestClientException, IOException {
-        String jsonResponse = getMovieDataFromIMDB(movieTitle);
-        MovieInfo info = unMarhsall(jsonResponse);
-
+        MovieInfo info = movieDataFetcher.getMovieDataFromIMDB(movieTitle);
         return info.getRuntime();
     }
 
     public String plot(String movieTitle) throws RestClientException, IOException {
-        String jsonResponse = getMovieDataFromIMDB(movieTitle);
-        MovieInfo info = unMarhsall(jsonResponse);
-
+        MovieInfo info = movieDataFetcher.getMovieDataFromIMDB(movieTitle);
         return info.getPlot();
     }
 
     public String rating(String movieTitle) throws RestClientException, IOException {
-        String jsonResponse = getMovieDataFromIMDB(movieTitle);
-        MovieInfo info = unMarhsall(jsonResponse);
-
+        MovieInfo info = movieDataFetcher.getMovieDataFromIMDB(movieTitle);
         return info.getImdbRating();
     }
 
     public String posterUrl(String movieTitle) throws RestClientException, IOException {
-        String jsonResponse = getMovieDataFromIMDB(movieTitle);
-        MovieInfo info = unMarhsall(jsonResponse);
-
+        MovieInfo info = movieDataFetcher.getMovieDataFromIMDB(movieTitle);
         return info.getPosterUrl();
-    }
-
-    private MovieInfo unMarhsall(String jsonResponse) throws IOException {
-        MovieInfo info;
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        info = mapper.readValue(jsonResponse, MovieInfo.class);
-        return info;
-    }
-
-    private String getMovieDataFromIMDB(String movieTitle) throws RestClientException {
-        String baseUrl = "http://www.omdbapi.com/";
-
-        String jsonResponse;
-        HttpClient httpClient = HttpClients.custom().build();
-        RestClient restClient  = new RestClient(baseUrl, httpClient);
-        jsonResponse = restClient.executeGet("?t=" + movieTitle);
-        return jsonResponse;
     }
 }

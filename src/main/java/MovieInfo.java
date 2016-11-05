@@ -22,6 +22,29 @@ public class MovieInfo {
         this.imdbRating = imdbRating;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MovieInfo info = (MovieInfo) o;
+
+        if (runtime != null ? !runtime.equals(info.runtime) : info.runtime != null) return false;
+        if (posterUrl != null ? !posterUrl.equals(info.posterUrl) : info.posterUrl != null) return false;
+        if (plot != null ? !plot.equals(info.plot) : info.plot != null) return false;
+        return imdbRating != null ? imdbRating.equals(info.imdbRating) : info.imdbRating == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = runtime != null ? runtime.hashCode() : 0;
+        result = 31 * result + (posterUrl != null ? posterUrl.hashCode() : 0);
+        result = 31 * result + (plot != null ? plot.hashCode() : 0);
+        result = 31 * result + (imdbRating != null ? imdbRating.hashCode() : 0);
+        return result;
+    }
+
     public String getPlot() {
         return plot;
     }
