@@ -13,12 +13,8 @@ import java.io.IOException;
 public class MovieData {
     private MovieDataFetcher movieDataFetcher;
 
-    public MovieData() {
-        movieDataFetcher = new MovieDataFetcher();
-    }
-
-    public MovieData(String baseUrl) {
-        movieDataFetcher = new MovieDataFetcher(baseUrl);
+    public MovieData(MovieDataFetcher movieDataFetcher) {
+        this.movieDataFetcher = movieDataFetcher;
     }
 
     public String howLongIsIt(String movieTitle) throws RestClientException, IOException {
