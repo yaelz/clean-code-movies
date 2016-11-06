@@ -12,27 +12,20 @@ import java.io.IOException;
  */
 public class MovieDataFetcher {
     RestClient restClient;
+    HttpClient httpClient = HttpClients.custom().build();
+    MovieInfoMarshaller marshaller = new MovieInfoMarshaller();
 
     public MovieDataFetcher() {
-        HttpClient httpClient = HttpClients.custom().build();
         restClient  = new RestClient("http://www.omdbapi.com/", httpClient);
     }
+
     public MovieDataFetcher(String baseUrl) {
-        HttpClient httpClient = HttpClients.custom().build();
         restClient  = new RestClient(baseUrl, httpClient);
     }
 
     public MovieInfo getMovieDataFromIMDB(String movieTitle) throws RestClientException, IOException {
         String jsonResponse;
         jsonResponse = restClient.executeGet("?t=" + movieTitle);
-        return unMarhsall(jsonResponse);
-    }
-
-    private MovieInfo unMarhsall(String jsonResponse) throws IOException {
-        MovieInfo info;
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        info = mapper.readValue(jsonResponse, MovieInfo.class);
-        return info;
+        return marshaller.unMarhsall(jsonResponse);
     }
 }
