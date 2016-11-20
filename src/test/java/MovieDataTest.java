@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class MovieDataTest extends Mockito {
     MovieDataFetcher fetcher = mock(MovieDataFetcher.class);
-    MovieData movieData = new MovieData(fetcher);
+    MovieData movieDataForMIB;
 
     @Before
     public void executedBeforeEach() throws RestClientException, IOException {
@@ -22,27 +22,28 @@ public class MovieDataTest extends Mockito {
                         "7.3"
                 )
         );
+        movieDataForMIB = new MovieData(fetcher, "men+in+black");
     }
 
 
     @Test
     public void testHowLongIsIt() throws RestClientException, IOException {
-        assertEquals(movieData.howLongIsIt("men+in+black"), "98 min");
+        assertEquals(movieDataForMIB.howLongIsIt(), "98 min");
     }
 
     @Test
     public void testPlot() throws RestClientException, IOException {
-        assertEquals(movieData.plot("men+in+black"), "A police officer joins a secret organization that polices and monitors extraterrestrial interactions on Earth.");
+        assertEquals(movieDataForMIB.plot(), "A police officer joins a secret organization that polices and monitors extraterrestrial interactions on Earth.");
     }
 
     @Test
     public void testRating() throws RestClientException, IOException {
-        assertEquals(movieData.rating("men+in+black"), "7.3");
+        assertEquals(movieDataForMIB.rating(), "7.3");
     }
 
     @Test
     public void testPosterUrl() throws RestClientException, IOException {
-        assertEquals(movieData.posterUrl("men+in+black"), "https://images-na.ssl-images-amazon.com/images/M/MV5BNzA2MzI5Nzc0N15BMl5BanBnXkFtZTcwODE2NDU2MQ@@._V1_SX300.jpg");
+        assertEquals(movieDataForMIB.posterUrl(), "https://images-na.ssl-images-amazon.com/images/M/MV5BNzA2MzI5Nzc0N15BMl5BanBnXkFtZTcwODE2NDU2MQ@@._V1_SX300.jpg");
     }
 
 }

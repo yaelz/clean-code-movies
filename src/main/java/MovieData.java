@@ -11,29 +11,25 @@ import java.io.IOException;
  * Created by Yael_Zaritsky on 03/11/2016.
  */
 public class MovieData {
-    private MovieDataFetcher movieDataFetcher;
+    private MovieInfo info;
 
-    public MovieData(MovieDataFetcher movieDataFetcher) {
-        this.movieDataFetcher = movieDataFetcher;
+    public MovieData(MovieDataFetcher movieDataFetcher, String movieTitle) throws RestClientException, IOException {
+        info = movieDataFetcher.getMovieDataFromIMDB(movieTitle);
     }
 
-    public String howLongIsIt(String movieTitle) throws RestClientException, IOException {
-        MovieInfo info = movieDataFetcher.getMovieDataFromIMDB(movieTitle);
+    public String howLongIsIt() throws RestClientException, IOException {
         return info.getRuntime();
     }
 
-    public String plot(String movieTitle) throws RestClientException, IOException {
-        MovieInfo info = movieDataFetcher.getMovieDataFromIMDB(movieTitle);
+    public String plot() throws RestClientException, IOException {
         return info.getPlot();
     }
 
-    public String rating(String movieTitle) throws RestClientException, IOException {
-        MovieInfo info = movieDataFetcher.getMovieDataFromIMDB(movieTitle);
+    public String rating() throws RestClientException, IOException {
         return info.getImdbRating();
     }
 
-    public String posterUrl(String movieTitle) throws RestClientException, IOException {
-        MovieInfo info = movieDataFetcher.getMovieDataFromIMDB(movieTitle);
+    public String posterUrl() throws RestClientException, IOException {
         return info.getPosterUrl();
     }
 }

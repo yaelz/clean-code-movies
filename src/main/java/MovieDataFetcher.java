@@ -15,10 +15,6 @@ public class MovieDataFetcher {
     HttpClient httpClient = HttpClients.custom().build();
     MovieInfoMarshaller marshaller = new MovieInfoMarshaller();
 
-    public MovieDataFetcher() {
-        restClient  = new RestClient("http://www.omdbapi.com/", httpClient);
-    }
-
     public MovieDataFetcher(String baseUrl) {
         restClient  = new RestClient(baseUrl, httpClient);
     }

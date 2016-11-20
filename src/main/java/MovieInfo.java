@@ -45,6 +45,16 @@ public class MovieInfo {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "MovieInfo{" +
+                "runtime='" + runtime + '\'' +
+                ", posterUrl='" + posterUrl + '\'' +
+                ", plot='" + plot + '\'' +
+                ", imdbRating='" + imdbRating + '\'' +
+                '}';
+    }
+
     public String getPlot() {
         return plot;
     }
