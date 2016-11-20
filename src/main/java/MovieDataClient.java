@@ -10,12 +10,12 @@ import java.io.IOException;
 /**
  * Created by Yael_Zaritsky on 05/11/2016.
  */
-public class MovieDataFetcher {
+public class MovieDataClient {
     RestClient restClient;
     HttpClient httpClient = HttpClients.custom().build();
     MovieInfoMarshaller marshaller = new MovieInfoMarshaller();
 
-    public MovieDataFetcher(String baseUrl) {
+    public MovieDataClient(String baseUrl) {
         restClient  = new RestClient(baseUrl, httpClient);
     }
 
